@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Results of B.E. - Vasavi College of Engineering</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    background: #f3ecd6;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #222;
+    margin: 0;
+    padding: 20px;
+    font-size: 13px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  .header-text {
+    text-align: center;
+    line-height: 1.4;
+    margin-bottom: 14px;
+  }
+  .header-text .college {
+    font-weight: bold;
+    font-size: 15px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    margin: 18px 0 14px;
+  }
+  .rollbox {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 6px;
+  }
+  .rollbox td {
+    padding: 6px;
+    font-size: 13px;
+  }
+  .rollbox input[type=text] {
+    width: 220px;
+    padding: 4px 6px;
+    border: 1px solid #999;
+  }
+  button {
+    background: #eee;
+    border: 1px solid #888;
+    padding: 4px 14px;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  button:hover { background: #ddd; }
+  .note-red {
+    color: #c0392b;
+    text-align: center;
+    font-size: 12px;
+    margin: 4px 0 14px;
+  }
+  table.data {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    background: #f3ecd6;
+  }
+  table.data caption {
+    background: #cfd6c2;
+    border: 1px solid #999;
+    font-weight: bold;
+    padding: 5px;
+  }
+  table.data th, table.data td {
+    border: 1px solid #999;
+    padding: 5px 7px;
+    text-align: left;
+  }
+  table.data th {
+    background: #e9e2c8;
+    text-align: center;
+    font-weight: bold;
+  }
+  table.data td.center { text-align: center; }
+  .grade-A { color: #1a7a1a; font-weight: bold; }
+  .grade-B { color: #1a7a1a; font-weight: bold; }
+  .grade-C { color: #c08a00; font-weight: bold; }
+  .grade-F { color: #c0392b; font-weight: bold; }
+  .result-box {
+    border: 1px solid #999;
+    background: #f3ecd6;
+    margin-bottom: 14px;
+  }
+  .result-box table { width: 100%; border-collapse: collapse; }
+  .result-box td {
+    border: 1px solid #999;
+    padding: 7px 10px;
+  }
+  .result-title {
+    background: #cfd6c2;
+    font-weight: bold;
+    text-align: center;
+    padding: 6px;
+    border: 1px solid #999;
+  }
+  .sem-passed { color: #1a7a1a; font-weight: bold; }
+  .sem-failed { color: #c0392b; font-weight: bold; }
+  .footer-note {
+    text-align: center;
+    font-size: 11px;
+    color: #c0392b;
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+  .actions { text-align: center; margin: 14px 0; }
+  .actions button { margin: 0 6px; }
+  .error-box {
+    text-align: center;
+    color: #c0392b;
+    font-weight: bold;
+    padding: 10px;
+    display: none;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header-text">
+    <div class="college">VASAVI COLLEGE OF ENGINEERING (AUTONOMOUS)</div>
+    Accredited By NAAC with A++ Grade<br>
+    Affiliated to Osmania University and Approved by AICTE<br>
+    Ibrahimbagh, Hyderabad - 500031, Telangana State, India
+  </div>
+
+  <h1>Results of B.E. IV - Semester Main &amp; Backlog Examinations,<br>held in May/June-2026</h1>
+
+  <table class="rollbox">
+    <tr>
+      <td>Enter Hall Ticket No. :</td>
+      <td><input type="text" id="rollNo" placeholder="e.g. 1602-24-737-158"></td>
+      <td><button onclick="loadStudent()">Submit</button></td>
+    </tr>
+  </table>
+  <div class="note-red">Please Enter 15 Digit Hall Ticket Number Ex: 1602-24-737-001, 1602-24-735-001.</div>
+
+  <div class="error-box" id="errorBox">Roll No. not found. Please check and re-enter.</div>
+
+  <div id="resultsArea" style="display:none;">
+
+    <table class="data">
+      <tr><th colspan="2">Personal Details</th><th colspan="2"></th></tr>
+      <tr><td><b>Course</b></td><td>Information Technology [IT-BE]</td><td><b>Examination</b></td><td>May/June-2026</td></tr>
+      <tr><td><b>Roll No</b></td><td id="rollDisplay">-</td><td><b>Name</b></td><td id="nameDisplay">-</td></tr>
+      <tr><td></td><td></td> 
+      </tr>
+    </table>
+
+    <table class="data" id="marksTable">
+      <caption>Marks Details</caption>
+      <thead>
+        <tr>
+          <th>S.No.</th>
+          <th style="text-align:left;">Course Code</th>
+          <th style="text-align:left;">Course</th>
+          <th>Year</th>
+          <th>Sem</th>
+          <th>Credits</th>
+          <th>CIE</th>
+          <th>SEE</th>
+          <th>Total</th>
+          <th>Grade</th>
+        </tr>
+      </thead>
+      <tbody id="marksBody"></tbody>
+    </table>
+
+    <div class="result-box" id="resultBox">
+      <div class="result-title">Result</div>
+      <table>
+        <tr>
+          <td id="semStatus">-</td>
+          <td>Semester Grade Point Average (SGPA) : <b id="sgpaVal">-</b></td>
+        </tr>
+        <tr>
+          <td colspan="2">Cumulative Grade Point Average (CGPA) : <b id="cgpaVal">-</b></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="actions">
+      <button onclick="window.print()">Print</button>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Note: Last date for submission of revaluation/photocopy application: --<br>
+    This information is provided to the candidate on his/her online request and is only a prototype list
+  </div>
+</div>
+
+<script>
+// ---- Subjects with credits & max marks (from the IV Semester Scheme of Instruction, R-24) ----
+const subjects = [
+  {code:"U24BS420MA", name:"Probability and Statistics", year:2, sem:4, credits:3, cieMax:40, seeMax:60},
+  {code:"U24PC410IT", name:"Computer Organization", year:2, sem:4, credits:3, cieMax:40, seeMax:60},
+  {code:"U24PC420IT", name:"Database Management Systems", year:2, sem:4, credits:3, cieMax:40, seeMax:60},
+  {code:"U24PC430IT", name:"Design & Analysis of Algorithms", year:2, sem:4, credits:3, cieMax:40, seeMax:60},
+  {code:"U24PC440IT", name:"Full Stack Development", year:2, sem:4, credits:3, cieMax:40, seeMax:60},
+  {code:"U24OE4XXXX", name:"Open Elective – II", year:2, sem:4, credits:3, cieMax:40, seeMax:60},
+  {code:"U24HS030EH", name:"Human Values and Professional Ethics – II", year:2, sem:4, credits:1, cieMax:30, seeMax:40},
+  {code:"U24BS430MA", name:"Skill Development Course – III (Aptitude)", year:2, sem:4, credits:1, cieMax:30, seeMax:40},
+  {code:"U24PE410IT", name:"Skill Development Course - IV (Technical Skills- II)", year:2, sem:4, credits:1, cieMax:30, seeMax:40},
+  {code:"U24PC421IT", name:"Database Management Systems Lab", year:2, sem:4, credits:1, cieMax:30, seeMax:50},
+  {code:"U24PC431IT", name:"Design and Analysis of Algorithms Lab", year:2, sem:4, credits:1, cieMax:30, seeMax:50},
+  {code:"U24PC441IT", name:"Full Stack Development Lab", year:2, sem:4, credits:1, cieMax:30, seeMax:50}
+];
+
+// ---- Student database: add one object per roll number ----
+// marks array order must match the `subjects` array order above: [CIE, SEE] for each subject.
+const studentsDB = {
+  
+  "1602-24-737-157": {
+    name: "M Niranjan",
+    marks: [
+      [35, 50], // Probability and Statistics
+      [32, 48], // Computer Organization
+      [38, 55], // Database Management Systems
+      [30, 45], // Design & Analysis of Algorithms
+      [36, 52], // Full Stack Development
+      [33, 50], // Open Elective - II
+      [25, 32], // Human Values and Professional Ethics - II
+      [28, 35], // Skill Development Course - III
+      [27, 34], // Skill Development Course - IV
+      [25, 42], // DBMS Lab
+      [26, 44], // DAA Lab
+      [27, 45]  // Full Stack Development Lab
+    ]
+  },
+  "1602-24-737-158": {
+    name: "KOMATI NISHANTH",
+    marks: [
+      [35, 50], // Probability and Statistics
+      [32, 48], // Computer Organization
+      [38, 55], // Database Management Systems
+      [30, 45], // Design & Analysis of Algorithms
+      [36, 52], // Full Stack Development
+      [33, 50], // Open Elective - II
+      [25, 32], // Human Values and Professional Ethics - II
+      [28, 35], // Skill Development Course - III
+      [27, 34], // Skill Development Course - IV
+      [25, 42], // DBMS Lab
+      [26, 44], // DAA Lab
+      [27, 45]  // Full Stack Development Lab
+    ]
+  },
+  "1602-24-737-159": {
+    name: "REVANTH G",
+    marks: [
+      [35, 50], // Probability and Statistics
+      [32, 48], // Computer Organization
+      [38, 55], // Database Management Systems
+      [30, 45], // Design & Analysis of Algorithms
+      [36, 52], // Full Stack Development
+      [33, 50], // Open Elective - II
+      [25, 32], // Human Values and Professional Ethics - II
+      [28, 35], // Skill Development Course - III
+      [27, 34], // Skill Development Course - IV
+      [25, 42], // DBMS Lab
+      [26, 44], // DAA Lab
+      [27, 45]  // Full Stack Development Lab
+    ]
+  },
+  "1602-24-737-160": {
+    name: "ROHAN T",
+    marks: [
+      [35, 50], // Probability and Statistics
+      [32, 48], // Computer Organization
+      [38, 55], // Database Management Systems
+      [30, 45], // Design & Analysis of Algorithms
+      [36, 52], // Full Stack Development
+      [33, 50], // Open Elective - II
+      [25, 32], // Human Values and Professional Ethics - II
+      [28, 35], // Skill Development Course - III
+      [27, 34], // Skill Development Course - IV
+      [25, 42], // DBMS Lab
+      [26, 44], // DAA Lab
+      [27, 45]  // Full Stack Development Lab
+    ]
+  }
+  ,
+  "1602-24-737-162": {
+    name: "Sai Ganesh K ",
+    marks: [
+      [35, 50], // Probability and Statistics
+      [32, 48], // Computer Organization
+      [38, 55], // Database Management Systems
+      [30, 45], // Design & Analysis of Algorithms
+      [36, 52], // Full Stack Development
+      [33, 50], // Open Elective - II
+      [25, 32], // Human Values and Professional Ethics - II
+      [28, 35], // Skill Development Course - III
+      [27, 34], // Skill Development Course - IV
+      [25, 42], // DBMS Lab
+      [26, 44], // DAA Lab
+      [27, 45]  // Full Stack Development Lab
+    ]
+  }
+  ,
+  "1602-24-737-163": {
+    name: "SAIHARSHITH K",
+    marks: [
+      [35, 50], // Probability and Statistics
+      [32, 48], // Computer Organization
+      [38, 55], // Database Management Systems
+      [30, 45], // Design & Analysis of Algorithms
+      [36, 52], // Full Stack Development
+      [33, 50], // Open Elective - II
+      [25, 32], // Human Values and Professional Ethics - II
+      [28, 35], // Skill Development Course - III
+      [27, 34], // Skill Development Course - IV
+      [25, 42], // DBMS Lab
+      [26, 44], // DAA Lab
+      [27, 45]  // Full Stack Development Lab
+    ]
+  }
+  ,
+  "1602-24-737-167": {
+    name: "SAKSHITHREDDY K",
+    marks: [
+      [35, 50], // Probability and Statistics
+      [32, 48], // Computer Organization
+      [38, 55], // Database Management Systems
+      [30, 45], // Design & Analysis of Algorithms
+      [36, 52], // Full Stack Development
+      [33, 50], // Open Elective - II
+      [25, 32], // Human Values and Professional Ethics - II
+      [28, 35], // Skill Development Course - III
+      [27, 34], // Skill Development Course - IV
+      [25, 42], // DBMS Lab
+      [26, 44], // DAA Lab
+      [27, 45]  // Full Stack Development Lab
+    ]
+  },
+  "1602-24-737-165": {
+    name: "SAI TEJA P",
+    marks: [
+      [35, 50], // Probability and Statistics
+      [32, 48], // Computer Organization
+      [38, 55], // Database Management Systems
+      [30, 45], // Design & Analysis of Algorithms
+      [36, 52], // Full Stack Development
+      [33, 50], // Open Elective - II
+      [25, 32], // Human Values and Professional Ethics - II
+      [28, 35], // Skill Development Course - III
+      [27, 34], // Skill Development Course - IV
+      [25, 42], // DBMS Lab
+      [26, 44], // DAA Lab
+      [27, 45]  // Full Stack Development Lab
+    ]
+  }
+  // Add more students like this:
+  // "1602-24-737-159": {
+  //   name: "STUDENT NAME",
+  //   fatherName: "FATHER NAME",
+  //   marks: [[cie,see], [cie,see], ... 12 pairs total]
+  // }
+};
+
+function gradeFor(pct){
+  if(pct >= 90) return {label:'O', points:10, cls:'grade-A'};
+  if(pct >= 80) return {label:'A+', points:9, cls:'grade-A'};
+  if(pct >= 70) return {label:'A', points:8, cls:'grade-A'};
+  if(pct >= 60) return {label:'B+', points:7, cls:'grade-B'};
+  if(pct >= 50) return {label:'B', points:6, cls:'grade-B'};
+  if(pct >= 45) return {label:'C', points:5, cls:'grade-C'};
+  if(pct >= 40) return {label:'P', points:4, cls:'grade-C'};
+  return {label:'F', points:0, cls:'grade-F'};
+}
+
+function buildTable(marksArr){
+  const tbody = document.getElementById('marksBody');
+  tbody.innerHTML = '';
+  let totalCredits = 0, totalPoints = 0, failed = false;
+
+  subjects.forEach((s, i) => {
+    const cie = marksArr[i] ? marksArr[i][0] : 0;
+    const see = marksArr[i] ? marksArr[i][1] : 0;
+    const total = cie + see;
+    const pct = (total / (s.cieMax + s.seeMax)) * 100;
+    const g = gradeFor(pct);
+    if(g.label === 'F') failed = true;
+    totalCredits += s.credits;
+    totalPoints += s.credits * g.points;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="center">${i+1}</td>
+      <td>${s.code}</td>
+      <td>${s.name}</td>
+      <td class="center">${s.year}</td>
+      <td class="center">${s.sem}</td>
+      <td class="center">${s.credits}</td>
+      <td class="center">${cie}</td>
+      <td class="center">${see}</td>
+      <td class="center">${total}</td>
+      <td class="center ${g.cls}">${g.label}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  const sgpa = (totalPoints / totalCredits).toFixed(2);
+  document.getElementById('sgpaVal').textContent = sgpa;
+  document.getElementById('cgpaVal').textContent = sgpa;
+  const statusEl = document.getElementById('semStatus');
+  if(failed){
+    statusEl.textContent = 'IV-Sem FAILED';
+    statusEl.className = 'sem-failed';
+  } else {
+    statusEl.textContent = 'IV-Sem PASSED';
+    statusEl.className = 'sem-passed';
+  }
+}
+
+function loadStudent(){
+  const roll = document.getElementById('rollNo').value.trim();
+  const student = studentsDB[roll];
+  const errorBox = document.getElementById('errorBox');
+  const resultsArea = document.getElementById('resultsArea');
+
+  if(!student){
+    errorBox.style.display = 'block';
+    resultsArea.style.display = 'none';
+    return;
+  }
+
+  errorBox.style.display = 'none';
+  resultsArea.style.display = 'block';
+  document.getElementById('rollDisplay').textContent = roll;
+  document.getElementById('nameDisplay').textContent = student.name;
+ 
+  buildTable(student.marks);
+}
+</script>
+</body>
+</html>
